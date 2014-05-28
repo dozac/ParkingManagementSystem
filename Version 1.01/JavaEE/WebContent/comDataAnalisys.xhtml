@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainCommuterDesk.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="Home Page" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:layoutUnit id="center" position="center">
+          
+          <form>
+          <p:panel header="Header"> 
+			<h:panelGrid columns="2">
+				<p:lineChart value="#{dataAnalisysBean.linearModel}" legendPosition="e"
+					zoom="true" animate="true" title="Employee Visitor Chart" minY="0" maxY="10"
+					style="width:400px;" />
+				
+				<p:barChart id="basic" value="#{dataAnalisysBean.categoryModel}"
+					legendPosition="ne" title="Employee Parking Allocation Chart" min="0" max="200"
+					style="width:400px" animate="true" />
+			</h:panelGrid>
+		  </p:panel>
+
+          </form>
+
+		</p:layoutUnit>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainEmployee.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="Home Page" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:layoutUnit id="center" position="center">
+
+			<h:form id="outOfficeTable">
+			    <p:growl id="messages" showDetail="true" />			    
+				<p:dataTable id="outoffice" var="outOffice" value="#{loginBean.selectedEmployee.outOffice}" editable="true">
+					
+					<f:facet name="header">  Update Out Of Office </f:facet>
+					<p:column headerText="Start Date" style="width:25%"> 
+						<h:outputText value="#{outOffice.office_dateout}" style="width:100%" >
+						<f:convertDateTime type="date" dateStyle="medium"/>	
+						</h:outputText>
+					</p:column>
+					
+					
+					<p:column headerText="End Date" style="width:25%">
+						<h:outputText value="#{outOffice.office_datein}" style="width:100%" >
+						<f:convertDateTime type="date" dateStyle="medium"/>	
+						</h:outputText>  
+					</p:column>
+									
+				</p:dataTable> 
+			</h:form>
+			
+			<h:form id="formUpdateOutOffice">
+							<h:outputLink id="loginLink" value="javascript:void(0)"
+								onclick="PF('dlgVisitor').show()" title="Set Out of Office">
+								<p:graphicImage value="/css/images/outoffice.png"/>
+							</h:outputLink>
+
+							<p:dialog id="dlgVisitorAdd" header="Set Out of Office" widgetVar="dlgVisitor"
+								resizable="false" width="300" height="150">
+
+								<h:panelGrid columns="3" cellpadding="5">
+	
+									<h:panelGroup>
+										<h:outputText value="Start Date:" />
+										<h:outputText style="color:red" value="*  " />
+									</h:panelGroup>
+									<p:calendar value="#{loginBean.startDate}"
+										pattern="MM/dd/yyyy" effect="explode"/>
+									<h:outputText value=" "
+										id="popupFromDate">
+									</h:outputText>
+									
+									<h:panelGroup>
+										<h:outputText value="End Date:" />
+										<h:outputText style="color:red" value="*  " />
+									</h:panelGroup>
+									<p:calendar value="#{loginBean.endDate}"
+										pattern="MM/dd/yyyy" effect="explode"/>
+									<h:outputText value=" "
+										id="popupUntilDate">
+									</h:outputText>	
+																			
+									<h:inputHidden id="submitEmployeeId" value="#{loginBean.selectedEmployee.employee_id}"/>
+
+									<f:facet name="footer">
+										<p:commandButton id="loginButton" value="Update" 
+											oncomplete="PF('dlgVisitor').hide();" actionListener="#{loginBean.addOutOffice}" update = ":outOfficeTable"/>								
+									</f:facet>
+								</h:panelGrid>
+							</p:dialog>
+						</h:form> 						                     
+		</p:layoutUnit>
+	</ui:define>
+</ui:composition>

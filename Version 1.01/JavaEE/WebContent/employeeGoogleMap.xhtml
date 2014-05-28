@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainEmployee.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="Google Maps" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:layoutUnit id="center" position="center">
+
+			<h:form>
+				<p:growl id="growl" showDetail="true" />
+				<p:gmap center="53.3575168, -6.2250436" zoom="16" type="HYBRID"
+					model="#{mapBean.simpleModel}" style="width:1000px;height:800px">
+					<p:ajax event="overlaySelect" listener="#{mapBean.onMarkerSelect}"
+						update="growl" />
+
+					<p:gmapInfoWindow>
+						<p:outputPanel
+							style="text-align:center;display:block;margin:auto:">
+							<p:graphicImage value="/css/images/#{mapBean.marker.data}"
+								height="150" width="130" />
+							<br />
+							<h:outputText value="#{mapBean.marker.title}" />
+						</p:outputPanel>
+				 </p:gmapInfoWindow>
+
+
+				</p:gmap>
+			</h:form>
+
+		</p:layoutUnit>
+	</ui:define>
+</ui:composition>      

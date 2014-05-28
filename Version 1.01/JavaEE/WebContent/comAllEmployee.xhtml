@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      template="/templates/mainCommuterDesk.xhtml">
+     
+      
+      <ui:define name="title"> <h:outputText value="Employee" /> </ui:define>
+           <ui:define name="content">
+           <p:layoutUnit id="center" position="center">
+           
+           <h:form id="form">
+                  <p:growl id="messages" showDetail="true"/>  
+                   
+					<p:dataTable id="dataTable" value="#{allEmployeesPageBean.employeeList}" rowKey="" var="employee" 
+						paginator="true" rows="10" binding="#{employeeDetailBean.dataTable}" widgetVar="varemployee" 
+						emptyMessage="No employee found with given criteria" filteredValue="#{allEmployeesPageBean.filteredEmployee}" 
+						editable="true">
+							<f:facet name="header">  
+            					<p:outputPanel>  
+                					<h:outputText value="Search all fields:" />  
+                					<p:inputText id="globalFilter"  onkeyup="varemployee.filter()" style="width:150px" />  
+            					</p:outputPanel>  
+        					</f:facet> 
+        					
+        			    	<p:ajax event="rowEdit" listener="#{allEmployeesPageBean.onEdit}" update=":form:messages" />  
+        					<p:ajax event="rowEditCancel" listener="#{allEmployeesPageBean.onCancel}" update=":form:messages" />
+
+		           
+					<p:column style="width:1%">			
+							<p:commandButton  id="loginLink" ajax="true"
+								action="#{allEmployeesPageBean.showParkingSpaceDialogAction}" immediate="true" 
+								icon="open" oncomplete= "dlgParkingSpace.show();" update=":frmParkingSpaceAdd" 
+								title="Add/Delete Parking Space">
+								<f:param name="paramEmployeeId" value="#{employee.employee_id}" />
+							   
+							</p:commandButton>						
+					</p:column>
+					
+					<p:column style="width:2%">
+						<h:commandLink immediate = "true" action="#{employeeDetailBean.showEmployee}" >
+								<f:param id="paramEmployeeId" value="#{employee.employee_id}"></f:param>
+								<p:graphicImage value="css/images/play.png"/>
+							</h:commandLink>
+					</p:column>
+
+					<p:column style="width:6%">
+						<p:rowEditor />
+					</p:column>
+
+					<p:column id="parkingSpaceNo" filterBy="#{employee.permParking.parkingspace.space_no}" headerText="Parking Space" footerText="Parking Space"
+						filterMatchMode="contains" style="width:30%">						
+								<h:outputText value="#{employee.permParking.parkingspace.space_no}" />							
+					</p:column>
+
+					<p:column id="employeeNo" filterBy="employee_no" headerText="Employee No" footerText="Employee No"
+						filterMatchMode="contains" style="width:30%">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.employee_no}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.employee_no}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column id="firstName" filterBy="#{employee.firstname}" headerText="First Name" footerText="First Name" 
+                            filterMatchMode="contains" style="width:30%" exportable="false">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.firstname}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.firstname}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column id="lastName" filterBy="#{employee.lastname}" headerText="Surname" footerText="Surname" 
+                            filterMatchMode="contains" style="width:30%">
+                            <p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.lastname}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.lastname}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor> 							
+						</p:column>
+
+					<p:column id="appDate" filterBy="#{employee.application_date}" headerText="Application Date" footerText="Application Date" 
+                            filterMatchMode="contains" style="width:30%"> 
+                            <p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.application_date}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.application_date}" style="width:100%">
+							    <f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							    </p:inputText>
+							</f:facet>
+						</p:cellEditor>
+						</p:column>
+
+					<p:column id="expDate" filterBy="#{employee.allocation_exp_date}" headerText="Allocation Expiary" footerText="Allocation Exp Date" 
+                            filterMatchMode="contains" style="width:30%">
+                            <p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.allocation_exp_date}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.allocation_exp_date}" style="width:100%" >
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</p:inputText>
+							</f:facet>
+						</p:cellEditor>							
+						</p:column>
+
+					<p:column id="employmentStatus" filterBy="#{employee.employment_status}" headerText="Status" footerText="Employment Status" 
+                            filterMatchMode="contains" style="width:30%">
+                            <p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{employee.employment_status}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{employee.employment_status}" style="width:100%" />
+							</f:facet>
+						   </p:cellEditor>  							
+						</p:column>									 
+				</p:dataTable>
+				
+						
+							
+			</h:form>
+
+
+			
+				<p:dialog id="dlgParkingSpaceAdd" header="Parking Allocation" widgetVar="dlgParkingSpace"
+								resizable="false" showEffect="fade" hideEffect="explode">
+                   <h:form id="frmParkingSpaceAdd">
+								<h:panelGrid columns="2" cellpadding="5">
+								
+								    <h:outputText value="Name: "    />
+								    <h:outputText value="#{allEmployeesPageBean.selectedEmployee.firstname}"  style="font-weight:bold"/> 
+																
+									<h:outputLabel value="Block:" />
+									<p:selectOneMenu value="#{allEmployeesPageBean.selectedBlockId}">
+									    <p:ajax update="selectParkingSp" listener="#{allEmployeesPageBean.handleBlockChange}"/>
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{allEmployeesPageBean.listBlock}" />
+									</p:selectOneMenu>
+			
+									<h:outputLabel value="Parking Space:" />
+									<p:selectOneMenu id="selectParkingSp" value="#{allEmployeesPageBean.selectedParkingSpaceId}" required="true">
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{allEmployeesPageBean.listParkingSpace}" />
+									</p:selectOneMenu>
+									
+						            <h:inputHidden id="submitEmplId" value="#{allEmployeesPageBean.selectedEmployee.employee_id}"/>
+									
+										
+									<f:facet name="footer">
+										<p:commandButton id="AddSpaceButton" value="Add Space" 
+											oncomplete="PF('dlgParkingSpace').hide();" effect="explode"
+											actionListener="#{allEmployeesPageBean.addParkingSpace}" update=":form:messages,:form,@form"
+											>
+										</p:commandButton>
+										
+										<p:commandButton id="DeleteSpaceButton" value="Delete" 
+											oncomplete="PF('dlgParkingSpace').hide();" effect="explode"
+											actionListener="#{allEmployeesPageBean.removeParkingSpace}" update=":form:messages :form, @form"  
+											immediate="true"
+											>
+										</p:commandButton>
+									</f:facet>
+								</h:panelGrid>
+						  </h:form>		
+					</p:dialog>														
+             </p:layoutUnit>          
+           </ui:define> 
+</ui:composition>

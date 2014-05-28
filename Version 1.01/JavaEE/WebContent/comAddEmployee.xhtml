@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainCommuterDesk.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="New Employee" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:layoutUnit id="center" position="center">
+
+			<h:form id="loginFormm">
+				<p:fieldset styleClass="fieldset" legend="New Employee Details">
+					<p:focus />
+					<p:messages id="messages" globalOnly="true" />
+
+					<p:panelGrid columns="6" id="logPanelGrid">
+						<f:facet name="header">  
+        			         Add New Employee  
+    			        </f:facet>
+						<h:panelGroup>
+							<h:outputText value="Employee Number:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="employee_no" value="#{enterEmployee.employee_no}"
+							required="true" label="Employee No"
+							title="Please enter the First Name!" />
+						<p:tooltip for="employee_no" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="First Name:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="FirstName" value="#{enterEmployee.firstname}"
+							required="true" label="First Name"
+							title="Please enter the First Name!" />
+						<p:tooltip for="FirstName" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Surname:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="surname" value="#{enterEmployee.lastname}"
+							required="true" label="Surname" title="Please enter the Surname!" />
+						<p:tooltip for="surname" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Application Date:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:calendar value="#{enterEmployee.application_date}"
+							id="popupAppDate" showOn="button" />
+						<h:outputText value="#{enterEmployee.application_date}"
+							id="popupBtnAppDate">
+							<f:convertDateTime pattern="yyyy/M/d" />
+						</h:outputText>
+
+						<h:panelGroup>
+							<h:outputText value="Allocation Expiration Date:" />
+							<h:outputText style="color:red" value=" " />
+						</h:panelGroup>
+						<p:calendar value="#{enterEmployee.allocation_exp_date}"
+							id="popupAllDate" showOn="button" />
+						<h:outputText value="#{enterEmployee.allocation_exp_date}"
+							id="popupBtnAllDate">
+							<f:convertDateTime pattern="yyyy/M/d" />
+						</h:outputText>
+
+						<h:panelGroup>
+							<h:outputText value="Employment Status:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<h:selectOneMenu id="status"
+							value="#{enterEmployee.employeeStatus}" required="true">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItems value="#{enterEmployee.status}" />
+						</h:selectOneMenu>
+						<p:tooltip for="status" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" title="Please select employemnt status!" />
+							
+						<h:panelGroup>
+							<h:outputText value="Access Type:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<h:selectOneMenu id="status"
+							value="#{enterEmployee.access_type}" required="true">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItems value="#{enterEmployee.empAccess}" />
+						</h:selectOneMenu>
+						<p:tooltip for="status" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" title="Please select access type!" />	
+
+						<h:panelGroup>
+							<h:outputText value="Company:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="CompanyName" value="#{enterEmployee.company}"
+							required="true" label="Company"
+							title="Please enter the Company name!" />
+						<p:tooltip for="CompanyName" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Email:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="email" value="#{enterEmployee.email}"
+							required="true" label="Email"
+							title="Please enter the Email address!" />
+						<p:tooltip for="email" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Phone Number:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="phonenumber" value="#{enterEmployee.phonenumber}"
+							required="true" label="Phone Number"
+							title="Please enter the Phone number!" />
+						<p:tooltip for="phonenumber" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Line Manager:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="linemanager" value="#{enterEmployee.linemanager}"
+							required="true" label="Line Manager"
+							title="Please enter the Phone number!" />
+						<p:tooltip for="linemanager" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Post Code:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="postcode" value="#{enterEmployee.postcode}"
+							required="true" label="Post Code"
+							title="Please enter the PostCode!" />
+						<p:tooltip for="postcode" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Line of Business:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="lineofbusiness"
+							value="#{enterEmployee.lineofbusiness}" required="true"
+							label="Line of Business" title="Please enter Line of Business!" />
+						<p:tooltip for="lineofbusiness" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Vehicle Reg:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="vehicle_regno"
+							value="#{enterEmployee.vehicle_regno}" required="true"
+							label="Vehicle Reg" title="Please enter Vehicle Registration!" />
+						<p:tooltip for="vehicle_regno" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Vehicle Make:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="make" value="#{enterEmployee.make}"
+							required="true" label="Vehicle Make"
+							title="Please enter Vehicle Make!" />
+						<p:tooltip for="make" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Vehicle Model:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="model" value="#{enterEmployee.model}"
+							required="true" label="Vehicle Model"
+							title="Please enter Vehicle Model!" />
+						<p:tooltip for="model" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Vehicle Colour:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="colour" value="#{enterEmployee.colour}"
+							required="true" label="Vehicle colour"
+							title="Please enter Vehicle Colour!" />
+						<p:tooltip for="colour" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Vehicle Date:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:calendar value="#{enterEmployee.date_vehicle_added}"
+							id="popupVehicDate" showOn="button" />
+						<h:outputText value="#{enterEmployee.date_vehicle_added}"
+							id="popupBtnVehicDate">
+							<f:convertDateTime pattern="yyyy/M/d" />
+						</h:outputText>
+
+						<h:panelGroup>
+							<h:outputText value="Car or Motorbike:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="carMotorbikeSpace"
+							value="#{enterEmployee.carMotorbikeSpace}" required="true"
+							label="Car or Motorbike"
+							title="Please enter the parking space type!" />
+						<p:tooltip for="carMotorbikeSpace" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Sticker No:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:inputText id="stickernumber"
+							value="#{enterEmployee.stickernumber}" required="true"
+							label="Sticker No" title="Please enter the Sticker No!" />
+						<p:tooltip for="stickernumber" styleClass="tooltip"
+							showEvent="focus" hideEvent="blur" />
+
+						<h:panelGroup>
+							<h:outputText value="Employee Note:" />
+							<h:outputText style="color:red" value=" " />
+						</h:panelGroup>
+						<p:inputTextarea rows="4" cols="33" id="notes"
+							value="#{enterEmployee.notes}" required="false"
+							label="Employee Note" title="Please enter a note!" />
+						<p:tooltip for="notes" styleClass="tooltip" showEvent="focus"
+							hideEvent="blur" />
+
+
+						<f:facet name="footer">
+							<p:commandButton id="newUserButton" action="#{enterEmployee.createEmployee}"
+								update="logPanelGrid,messages" icon="ui-icon-check"
+								value="Submit" />
+						</f:facet>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</p:layoutUnit>
+	</ui:define>
+</ui:composition>

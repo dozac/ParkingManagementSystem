@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainEmployee.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="Home Page" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:layoutUnit id="center" position="center">
+
+			<h:form>
+				<p:growl id="messages" showDetail="true" />
+			</h:form>
+
+				<p:growl id="messages" showDetail="true" />
+				<h:form id="formParkingAvab">
+					<p:dataTable id="dataTable" var="ooo" value="#{loginBean.activeOutOfOfficeIntimations}">
+						
+						<f:facet name="header">  Parking Spaces Availability  </f:facet>
+						<p:column style="width:1%">
+							<p:commandButton id="loginLink" ajax="true"
+								action="#{loginBean.showOooDialogAction}" immediate="true"
+								icon="open" oncomplete="dlgAllocation.show();" update="@form, "
+								title="Temporary Allocation Request">
+								<f:param name="paramOooId" value="#{ooo.outofoffice_id}" />
+
+							</p:commandButton>
+						</p:column>
+
+						<p:column headerText="Block">
+							<h:outputText
+								value="#{ooo.employee.permParking.parkingspace.block.block_code}" />
+						</p:column>
+
+						<p:column headerText="Parking Space">
+							<h:outputText
+								value="#{ooo.employee.permParking.parkingspace.space_no}" />
+						</p:column>
+
+						<p:column headerText="From" style="width:25%">
+							<h:outputText value="#{ooo.office_dateout}" />
+						</p:column>
+
+						<p:column headerText="Until" style="width:25%">
+							<h:outputText value="#{ooo.office_datein}" />
+						</p:column>
+
+						<f:facet name="footer">.</f:facet>
+					</p:dataTable>
+
+
+					<p:dialog id="dlgParkingSpaceAdd" header="Allocation Request"
+						widgetVar="dlgAllocation" resizable="false" showEffect="fade"
+						hideEffect="explode">
+						<h:panelGrid columns="3" cellpadding="5">
+
+							<h:outputText value="Parking Space: " />
+							<h:outputText
+								value="#{selectedooo.employee.permParking.parkingspace.space_no}"
+								style="font-weight:bold" />
+
+							<f:facet name="footer">
+								<p:commandButton id="AddAllocationButton"
+									value="Request Allocation"
+									oncomplete="PF('dlgAllocation').hide();" effect="explode"
+									actionListener="#{loginBean.webAllocationRequest}" update = "@form" immediate="true">
+								</p:commandButton>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+		</p:layoutUnit>
+	</ui:define>
+</ui:composition>

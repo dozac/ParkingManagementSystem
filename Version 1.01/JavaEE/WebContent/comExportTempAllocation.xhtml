@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      template="/templates/mainCommuterDesk.xhtml">
+     
+      
+      <ui:define name="title"> <h:outputText value="Out Of Office" /> </ui:define>
+           <ui:define name="content">
+           <p:layoutUnit id="center" position="center">
+           
+            <h:form id="formNonActiveAllocations">
+			<p:dataTable id="dataTbl" var="tempAllocation" value="#{tempAllocationBean.tempNonActiveAllocationList}" 
+			sortMode="multiple" paginator="true"  scrollRows="3" scrollable="true" liveScroll="true" scrollHeight="150">
+			<f:facet name="header">  
+		            	Non Active Temporary Allocations  
+		    </f:facet>
+			
+				<p:column sortBy="employee.tempParking.parkingspace.space_no">
+					<f:facet name="header">
+						<h:outputText value="Parking Space" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.employee.tempParking.parkingspace.space_no}" />
+				</p:column>
+				
+				<p:column sortBy="employee.tempParking.parkingspace.block.block_code">
+					<f:facet name="header">
+						<h:outputText value="Block" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.employee.tempParking.parkingspace.block.block_code}" />
+				</p:column>
+
+				<p:column sortBy="employee.firstname">
+					<f:facet name="header">
+						<h:outputText value="First Name" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.employee.firstname}" />
+				</p:column>
+				
+				<p:column sortBy="employee.lastname">
+					<f:facet name="header">
+						<h:outputText value="Surname" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.employee.lastname}" />
+				</p:column>
+				
+				<p:column sortBy="start_date">
+					<f:facet name="header">
+						<h:outputText value="Start Date" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.start_date}">
+					<f:convertDateTime type="date" dateStyle="medium"/>
+						
+					</h:outputText>
+				</p:column>
+				
+				<p:column sortBy="end_date">
+					<f:facet name="header">
+						<h:outputText value="End Date" />
+					</f:facet>
+					<h:outputText value="#{tempAllocation.end_date}">
+					<f:convertDateTime type="date" dateStyle="medium"/>	
+					</h:outputText>
+				    </p:column>
+			        
+			        </p:dataTable>
+                    <h:panelGrid columns="2">
+					<p:panel header="Export All Data">
+						<h:commandLink>
+							<p:graphicImage value="css/images/excel.png" />
+							<p:dataExporter type="xls" target="dataTbl"
+								fileName="allEmployees" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/pdf.png" />
+							<p:dataExporter type="pdf" target="dataTbl"
+								fileName="allEmployees" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/csv.png" />
+							<p:dataExporter type="csv" target="dataTbl"
+								fileName="allEmployees" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/xml.png" />
+							<p:dataExporter type="xml" target="dataTbl"
+								fileName="allEmployees" />
+						</h:commandLink>
+					</p:panel>
+
+					<p:panel header="Export Page Data">
+						<h:commandLink>
+							<p:graphicImage value="css/images/excel.png" />
+							<p:dataExporter type="xls" target="dataTbl" fileName="selectEmployee"
+								pageOnly="true" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/pdf.png" />
+							<p:dataExporter type="pdf" target="dataTbl" fileName="selectEmployee"
+								pageOnly="true" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/csv.png" />
+							<p:dataExporter type="csv" target="dataTbl" fileName="selectEmployee"
+								pageOnly="true" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage value="css/images/xml.png" />
+							<p:dataExporter type="xml" target="dataTbl" fileName="selectEmployee"
+								pageOnly="true" />
+						</h:commandLink>
+					</p:panel>
+				  </h:panelGrid>
+                </h:form>
+	          </p:layoutUnit>          
+           </ui:define> 
+</ui:composition>

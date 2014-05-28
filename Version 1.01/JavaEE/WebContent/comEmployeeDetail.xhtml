@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/mainCommuterDesk.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="Employee" />
+	</ui:define>
+
+	<ui:define name="content">	
+		<p:layoutUnit id="center" position="center" >
+			<h2 class="title ui-widget-header ui-corner-all">Employee details for: #{employeeDetailBean.selectedEmployee.firstname} 
+			#{employeeDetailBean.selectedEmployee.lastname}</h2>
+
+		<!--   PDF & RESET PASSWORD BUTTON -->
+		<h:form id="formPdfCreate">
+			<p:growl id="growl" showDetail="true" sticky="true" />
+            <h:commandButton actionListener="#{employeeDetailBean.pdfCreate}" value="PDF" icon="ui-icon-disk" />
+            <p:commandButton value="Reset Password" actionListener="#{employeeDetailBean.confirmResetPassword}" icon="ui-icon-print" update="growl">
+            	<p:confirm header="Reset Password Confirmation" message="Are you sure you want to rest the password?" icon="ui-icon-alert" />
+            </p:commandButton>
+            
+             <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+		        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>    
+		    </p:confirmDialog>
+            
+         </h:form> 
+		
+		
+		<!--   	
+			<h:form id="formPdfCreate">
+            <h:commandButton actionListener="#{employeeDetailBean.pdfCreate}" value="PDF" icon="ui-icon-disk" >
+            </h:commandButton>
+            </h:form> PDF BUTTON    -->
+            
+		<!--   VISITOR TABLE    -->	
+			<br />
+			<h:form id="formVisitorsTable" prependId="false">
+				<p:growl id="messages" showDetail="false" sticky="true"/> 
+           		<p:dataTable id="visitors" var="visitor" value="#{employeeDetailBean.selectedEmployee.employeeVisitors}" editable="true"> 
+           			 <f:facet name="header">  
+		            	Visitors  
+		             </f:facet> 
+		             <p:ajax event="rowEdit" listener="#{employeeDetailBean.onEdit}" update=":formVisitorsTable:messages" />
+			         <p:ajax event="rowEditCancel" listener="#{employeeDetailBean.onCancel}" update=":formVisitorsTable:messages" />
+					  <p:column style="width:6%">
+			            <p:rowEditor />
+			        </p:column>
+			        <p:column headerText="Visitor Name" style="width:30%">
+			            <p:cellEditor>
+			                <f:facet name="output">
+			                    <h:outputText value="#{visitor.visitor_name}" />
+			                </f:facet>
+			                <f:facet name="input">
+			                    <p:inputText value="#{visitor.visitor_name}" style="width:100%"/>
+			                </f:facet>
+			            </p:cellEditor>
+			        </p:column>
+			        <p:column headerText="Start Date" style="width:25%">  
+            			#{visitor.allocation_start_datetime}  
+        			</p:column>
+					
+					<p:column headerText="End Date" style="width:25%">  
+            			#{visitor.allocation_end_datetime}  
+        			</p:column>	
+           		</p:dataTable>
+        	</h:form>
+        	
+        	<!--  ADD VISITOR DIALOG    -->	
+        	<h:form id="formAddVisitor">
+				<h:outputLink id="loginLink" value="javascript:void(0)"
+					onclick="PF('dlgVisitor').show()" title="Add Visitor">
+					<p:graphicImage value="/css/images/allocate.png"/>
+				</h:outputLink>
+
+				<p:growl id="growl" showDetail="true" life="3000" />
+
+				<p:dialog id="dlgVisitorAdd" header="New Visitor" widgetVar="dlgVisitor"
+					resizable="false">
+
+					<h:panelGrid columns="3" cellpadding="5">
+
+						<h:panelGroup>
+							<h:outputText value="From:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:calendar value="#{employeeDetailBean.startDate}"
+							pattern="MM/dd/yyyy HH:mm" effect="explode"/>
+						<h:outputText value="#{employeeDetailBean.startDate}"
+							id="popupFromDate">
+						</h:outputText>
+									
+						<h:panelGroup>
+							<h:outputText value="Until:" />
+							<h:outputText style="color:red" value="*  " />
+						</h:panelGroup>
+						<p:calendar value="#{employeeDetailBean.endDate}"
+							pattern="MM/dd/yyyy HH:mm" effect="explode"/>
+						<h:outputText value="#{employeeDetailBean.endDate}"
+							id="popupUntilDate">
+						</h:outputText>	
+									
+						<h:outputLabel for="visitorName" value="Visitor Name:" />
+						<p:inputText value="#{employeeDetailBean.visitorName}" id="visitorName"
+							required="true" label="visitorName" />
+						<h:outputLabel/>
+
+						<h:outputLabel value="Block:" />
+						<p:selectOneMenu value="#{employeeDetailBean.selectedBlockId}">
+						    <p:ajax update="selectParking" listener="#{employeeDetailBean.handleBlockChange}"/>
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItems value="#{employeeDetailBean.listBlock}" />
+						</p:selectOneMenu>
+						<h:outputLabel/>
+						
+			           <h:outputLabel value="Parking Space:" />
+			               <p:selectOneMenu id="selectParking" value="#{employeeDetailBean.selectedParkingSpaceId}" required="true">
+				           <f:selectItem itemLabel="Select One" itemValue="" />
+				           <f:selectItems value="#{employeeDetailBean.listParkingSpace}" />
+			           </p:selectOneMenu>
+						           
+						<h:inputHidden id="submitEmployeeId" value="#{employeeDetailBean.selectedEmployee.employee_id}"/>
+
+						<f:facet name="footer">
+								<p:commandButton id="loginButton" value="Add Visitor" update=":formVisitorsTable @form"
+								oncomplete="PF('dlgVisitor').hide();" 
+								actionListener="#{employeeDetailBean.addVisitor}">
+								
+							</p:commandButton>
+						</f:facet>
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+		 
+		 <!--   NOTES TABLE    -->		
+   		 <br /> 
+		 <br /> 
+			<p:separator id="notesep" />
+			<h:form id="formNoteTable">
+				<p:growl id="messages" showDetail="true" sticky="true"/> 
+				<p:dataTable id="note" var="note" value="#{employeeDetailBean.selectedEmployee.notes}" editable="true">
+				<p:ajax event="rowEdit" listener="#{employeeDetailBean.onEditNote}" update=":formNoteTable:messages" />  
+        		<p:ajax event="rowEditCancel" listener="#{employeeDetailBean.onCancelNote}" update=":formNoteTable:messages" />
+
+					<p:column style="width:6%">
+						<p:rowEditor />
+					</p:column>	
+								
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Internal Notes" />  
+						</p:outputPanel>
+					</f:facet>
+
+					<p:column headerText="Id">
+						<h:outputText value="#{note.note_id}" />
+					</p:column>
+					
+					<p:column headerText="Note" style="width:25%">  
+            		    <p:cellEditor>  
+                           <f:facet name="output">
+							    <h:outputText value="#{note.txt_note}" />
+						   </f:facet>
+						   <f:facet name="input">
+							    <p:inputText value="#{note.txt_note}" style="width:100%" />
+						   </f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+
+					<p:column headerText="Date">
+						<h:outputText value="#{note.date}">
+							<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<!--   ADD NOTE DIALOG    -->	
+			<h:form id="formAddNote">
+				<h:outputLink id="newNoteLink" value="javascript:void(0)"
+					onclick="PF('dlgNote').show()" title="Add Note">
+					<p:graphicImage value="/css/images/newnote.png"/>
+				</h:outputLink>
+
+				<p:growl id="growl" showDetail="true" life="3000" />
+				<p:dialog id="dialog" header="New Note" widgetVar="dlgNote"
+					resizable="false">
+	
+					<h:panelGrid columns="1" cellpadding="2">		
+						<p:inputTextarea rows="6" cols="33" value="#{employeeDetailBean.note}"/>
+				
+				 <h:inputHidden id="submitEmployeeId" 
+					value="#{employeeDetailBean.selectedEmployee.employee_id}"/>
+	
+						<f:facet name="footer">
+							<p:commandButton id="addNoteButton" value="Submit" update=":formNoteTable @form"
+								oncomplete="PF('dlgNote').hide();" actionListener="#{employeeDetailBean.addNewNote}"
+								 />							     
+						</f:facet>
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+			
+			<!--   CONTACT DETAILS TABLE    -->				
+			 <br /> 
+			 <br />
+			 <p:separator id="contactsep" />
+			<h:form id="formContactTable">
+				<p:growl id="messages" showDetail="true" sticky="true"/> 
+				<p:dataTable var="contact"
+					value="#{employeeDetailBean.selectedEmployee.contactDetails}" editable="true">
+					<p:ajax event="rowEdit" listener="#{employeeDetailBean.onEditContact}" update=":formContactTable:messages" />
+			         <p:ajax event="rowEditCancel" listener="#{employeeDetailBean.onCancelContact}" update=":formContactTable:messages" />
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Contact Details" />
+						</p:outputPanel>
+					</f:facet>
+
+					<p:column style="width:6%">
+			            <p:rowEditor />
+			        </p:column>
+					<p:column headerText="Company">
+					 	<p:cellEditor>
+					 	<f:facet name="output">
+							<h:outputText value="#{contact.company}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:inputText value="#{contact.company}"> </h:inputText>
+						</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Phone Number">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.phonenumber}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{contact.phonenumber}"/>
+							</f:facet>	
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="Line Manager">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.linemanager}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{contact.linemanager}"></h:inputText>
+							</f:facet>					
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Department">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.lineofbusiness}" />
+							</f:facet>							
+							<f:facet name="input">
+								<h:inputText value="#{contact.lineofbusiness}" ></h:inputText>							
+							</f:facet>
+						</p:cellEditor>				
+					</p:column>
+					<p:column headerText="Post Code">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.postcode}" />
+							</f:facet>
+							
+							<f:facet name="input">
+								<h:inputText value="#{contact.postcode}" />
+							</f:facet>
+						</p:cellEditor>
+						
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			 
+			 <!--   VEHICLE DETAILS TABLE    -->	
+			 <br />
+			 <br /> 
+			<p:separator id="vehiclesep" />
+			<h:form id="formVehicleTable">
+				<p:growl id="messages" showDetail="true" sticky="true"/> 
+				<p:dataTable var="car"
+					value="#{employeeDetailBean.selectedEmployee.employeeCar}" editable="true">
+					<p:ajax event="rowEdit" listener="#{employeeDetailBean.onEditVehicle}" update=":formVehicleTable:messages" />
+			         <p:ajax event="rowEditCancel" listener="#{employeeDetailBean.onCancelVehicle}" update=":formVehicleTable:messages" />
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Vehicle Details" />
+						</p:outputPanel>
+					</f:facet>
+					<p:column style="width:6%">
+			            <p:rowEditor />
+			        </p:column>
+					<p:column headerText="Vehicle Reg">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.vehicle_regno}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.vehicle_regno}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Vehicle Make">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.make}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.make}" />
+							</f:facet>
+						</p:cellEditor>	
+					</p:column>
+
+					<p:column headerText="Vehicle Model">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.model}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.model}" />
+							</f:facet>
+						</p:cellEditor>
+						
+					</p:column>
+
+					<p:column headerText="Vehicle Colour">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.colour}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.colour}" />
+							</f:facet>
+						</p:cellEditor>
+						
+					</p:column>
+
+					<p:column headerText="Sticker No">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.stickernumber}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.stickernumber}" />
+							</f:facet>
+						</p:cellEditor>
+						
+					</p:column>
+
+					<p:column headerText="Space Type">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.car_or_motorbike_space}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{car.car_or_motorbike_space}" />
+							</f:facet>
+						</p:cellEditor>
+						
+					</p:column>
+
+					<p:column headerText="Date">
+						<h:outputText value="#{car.date_vehicle_added}">
+							<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>      
+				</p:dataTable>
+			</h:form>
+			
+			<!--   OUT OF OFFICE TABLE    -->	
+			 <br />
+			 <br /> 
+			<p:separator id="OutOfficesep" />
+			<h:form id="formOutOfficeTable">
+				<p:growl id="messages" showDetail="true" sticky="true"/> 
+				<p:dataTable var="oo"
+					value="#{employeeDetailBean.selectedEmployee.outOffice}" editable="true" >
+					<p:ajax event="rowEdit" listener="#{employeeDetailBean.onEditOutOfOffice}" update=":formVehicleTable:messages" />
+			        <p:ajax event="rowEditCancel" listener="#{employeeDetailBean.onCancelOutOfOffice}" update=":formVehicleTable:messages" />
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Out Of Office Details" />
+						</p:outputPanel>
+					</f:facet>
+					<p:column style="width:6%">
+			            <p:rowEditor />
+			        </p:column>
+			        
+					<p:column headerText="Start">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{oo.office_dateout}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{oo.office_dateout}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:inputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="End">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{oo.office_datein}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{oo.office_datein}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</h:inputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+				 </p:dataTable>
+			</h:form>
+			
+        	</p:layoutUnit>
+	</ui:define>
+</ui:composition>
